@@ -110,7 +110,7 @@ module.exports = (function() {
                var img = imgs[i];
                var srcFull = img.getAttribute('src');
                var caption = img.getAttribute('alt');
-               if(srcFull) {
+               if(srcFull && srcFull.indexOf('/special/') === -1) {
                   var srcOrig = srcFull;
 
                   if(!srcFull.match(/http(s?):\/\//)) {

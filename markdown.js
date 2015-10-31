@@ -95,7 +95,7 @@ module.exports = function(dom) {
 
   function a(dom) {
     var href = dom.getAttribute('href');
-    if(href.indexOf('forum') === -1) {
+    if(href.indexOf('forum') === -1 && href.indexOf('/special/') === -1) {
       var content = read(dom);
 
       if(content.indexOf('Full story') === -1) {
