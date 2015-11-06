@@ -144,18 +144,18 @@ module.exports = (function() {
          });
 
          return defer.promise;
-      }
 
-      function err(str) {
-         console.error('Error from url: ' + url);
-         console.error(str);
-         defer.resolve(null);
+         function err(str) {
+            console.error('Error from url: ' + url);
+            console.error(str);
+            defer.resolve(null);
 
-         if(cb) {
-            cb(null);
+            if(cb) {
+               cb(null);
+            }
+
+            return false;
          }
-
-         return false;
       }
    }
 })();

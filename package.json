@@ -1,6 +1,6 @@
 {
   "name": "xinhua-reader",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Reads a Xinhua article from xinhuanews.com",
   "main": "index.js",
   "scripts": {
