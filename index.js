@@ -103,7 +103,11 @@ module.exports = (function() {
                return err('unable to find datetime');
             }
 
-            Article.datetime = new Date(datetime).toISOString().replace('T', ' ').replace('Z', '') + ' GMT+0000';
+            try {
+               Article.datetime = new Date(datetime).toISOString().replace('T', ' ').replace('Z', '') + ' GMT+0000';
+            } catch(e) {
+               return err('unable to read datetime: ' + datetime);
+            }
 
             var imgs = body.getElementsByTagName('img');
             for(var i = 0; i < imgs.length; i++) {
