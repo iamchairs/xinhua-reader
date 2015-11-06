@@ -95,7 +95,7 @@ module.exports = (function() {
             var datetime;
             for(var i = 0; i < meta.length; i++) {
                if(meta[i].getAttribute('name') === 'pubdate') {
-                  datetime = meta[i].getAttribute('content');
+                  datetime = meta[i].getAttribute('content').replace(/^\s*/, '').replace(/\s*$/, '');
                }
             }
 
