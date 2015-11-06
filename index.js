@@ -91,15 +91,17 @@ module.exports = (function() {
                allowedAttributes: self.cleanAttributes
             }).replace(/^\s*/, '');
 
-            var datedom = dom.getElementById('pubtime');
-            if(!datedom) {
-               return err('unable to find datetime');
+            var meta = dom.getElementsByTagName('meta');
+            var datetime;
+            for(var i = 0; i < meta.length; i++) {
+               if(meta[i].getAttribute('name') === 'pubdate') {
+                  datetime = meta.getAttribute('content');
+               }
             }
 
-            var datetime = sanitizehtml(datedom, {
-               allowedTags: self.cleanTags,
-               allowedAttributes: self.cleanAttributes
-            });
+            if(!datetime) {
+               return err('unable to find datetime');
+            }
 
             Article.datetime = new Date(datetime).toISOString().replace('T', ' ').replace('Z', '') + ' GMT+0000';
 
