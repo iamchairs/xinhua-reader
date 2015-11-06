@@ -35,10 +35,7 @@ module.exports = (function() {
 
          request(url, function(error, response, body) {
             if(error) {
-               defer.reject(error);
-               if(cb) {
-                  cb(error);
-               }
+               return err(error);
             }
 
             var Article = {
@@ -58,16 +55,15 @@ module.exports = (function() {
                dom = self.DOMParser.parseFromString(body, 'text/html');
             } catch(e) {}
 
+            if(!dom) {
+               return err('wasnt able to read dom');
+            }
+
             var divs = dom.getElementsByTagName('div');
             var body = dom.getElementById('content');
 
-            if(!body.getElementsByTagName) {
-               if(cb) {
-                  cb(null);
-               }
-
-               defer.resolve(null);
-               return false;
+            if(!body || !body.getElementsByTagName) {
+               return err('wasnt able to find dom body');
             }
 
             var ps = body.getElementsByTagName('p');
@@ -96,14 +92,16 @@ module.exports = (function() {
             }).replace(/^\s*/, '');
 
             var datedom = dom.getElementById('pubtime');
-            if(datedom) {
-               var datetime = sanitizehtml(datedom, {
-                  allowedTags: self.cleanTags,
-                  allowedAttributes: self.cleanAttributes
-               });
-
-               Article.datetime = new Date(datetime).toISOString().replace('T', ' ').replace('Z', '') + ' GMT+0000';
+            if(!datedom) {
+               return err('unable to find datetime');
             }
+
+            var datetime = sanitizehtml(datedom, {
+               allowedTags: self.cleanTags,
+               allowedAttributes: self.cleanAttributes
+            });
+
+            Article.datetime = new Date(datetime).toISOString().replace('T', ' ').replace('Z', '') + ' GMT+0000';
 
             var imgs = body.getElementsByTagName('img');
             for(var i = 0; i < imgs.length; i++) {
@@ -146,6 +144,18 @@ module.exports = (function() {
          });
 
          return defer.promise;
+      }
+
+      function err(str) {
+         console.error('Error from url: ' + url);
+         console.error(str);
+         defer.resolve(null);
+
+         if(cb) {
+            cb(null);
+         }
+
+         return false;
       }
    }
 })();
